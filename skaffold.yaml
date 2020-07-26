@@ -1,35 +1,28 @@
----
-apiVersion: skaffold/v1beta2
+apiVersion: skaffold/v2beta5
 kind: Config
+metadata:
+  name: complex-k-s
 build:
   local:
     push: false
-  artificats:
-    - image: rahulroot/multi-client
-      context: client
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        '**/*.js': .
-        '**/*.css': .
-        '**/*.html': .
-    - image: rahulroot/multi-server
-      context: server
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        '**/*.js': .
-    - image: rahulroot/multi-worker
-      context: worker
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        '**/*.js': .
+  artifacts:
+  - image: rahulroot/multi-client
+    context: client
+    docker:
+      dockerfile: Dockerfile.dev
+  - image: rahulroot/multi-server
+    context: server
+    docker:
+      dockerfile: Dockerfile.dev
+  - image: rahulroot/multi-worker
+    context: worker
+    docker:
+      dockerfile: Dockerfile.dev
 deploy:
   kubectl:
     manifests:
-      - k8s/client-deployment.yaml
-      - k8s/server-deployment.yaml
-      - k8s/worker-deployment.yaml
-      - k8s/server-cluster-ip-service.yaml
-      - k8s/client-cluster-ip-service.yaml
+    - k8s/client-deployment.yaml
+    - k8s/client-cluster-ip-service.yaml
+    - k8s/server-deployment.yaml
+    - k8s/server-cluster-ip-service.yaml
+    - k8s/worker-deployment.yaml
